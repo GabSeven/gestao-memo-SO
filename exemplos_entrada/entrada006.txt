@@ -1,0 +1,6 @@
+2
+p01;p02
+aloca p01 100
+acessa p01 150
+aloca p02 50
+acessa p02 10

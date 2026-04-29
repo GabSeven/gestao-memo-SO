@@ -1,0 +1,7 @@
+3
+abc;def;ghi
+aloca abc 2000
+aloca def 1000
+libera abc
+aloca ghi 1500
+acessa ghi 500

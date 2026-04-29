@@ -1,0 +1,7 @@
+alocacao p01 0 499
+alocacao p02 500 999
+acesso p01 10 10
+acesso p01 20 20
+acesso p01 499 499
+liberacao p01 0 499
+liberacao p02 500 999

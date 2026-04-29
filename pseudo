@@ -1,0 +1,44 @@
+
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        finalizar_com_erro("Quantidade incorreta de argumentos. Uso: ./simulador <estratégia> <arquivo_entrada>");
+    }
+
+
+    // if estrategia nao existe, finaliza
+
+    FILE *arquivo_entrada = fopen(argv[2], "r");
+
+    if (!arquivo_entrada) {
+        finalizar_com_erro("Arquivo de entrada não encontrado.");
+    }
+
+
+
+    // char name_log[TAM_MAX_LINHA] = "log_";
+    // strcat(name_log, argv[2]);
+    // strcat(name_log, "_");
+    // strcat(name_log, argv[1]);
+    // strcat(name_log, ".txt");
+    // printf("%s", name_log);
+    // FILE *log = fopen("ue", "w");
+    // fprintf(log, "oi");
+    // char buffer[TAM_MAX_LINHA];
+    // fgets(buffer, TAM_MAX_LINHA, arquivo_entrada);
+
+    // int qnt_processos;
+    // if (sscanf(buffer, "%d", &qnt_processos)!= 1) {
+    //     finalizar_com_erro("eita");
+    // }
+
+    // salve o id dos processos
+    // fgets(buffer, TAM_MAX_LINHA, arquivo_entrada);
+
+
+    printf("%d", qnt_processos);
+
+
+    fclose(log);
+    fclose(arquivo_entrada);
+    return 0;
+}

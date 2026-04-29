@@ -1,0 +1,6 @@
+3
+b01;b02;b03
+aloca b01 300
+aloca b02 700
+aloca b03 1000
+libera b01

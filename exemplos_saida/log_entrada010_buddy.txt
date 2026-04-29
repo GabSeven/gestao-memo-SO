@@ -1,0 +1,2 @@
+alocacao b01 0 4095
+alocacao b02 erro!

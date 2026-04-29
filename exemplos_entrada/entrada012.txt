@@ -1,0 +1,10 @@
+6
+p01;p02;p03;p04;p05;p06
+aloca p01 500
+aloca p02 100
+aloca p03 200
+aloca p04 150
+libera p01
+libera p03
+aloca p05 50
+aloca p06 25

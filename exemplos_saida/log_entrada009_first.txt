@@ -1,0 +1,7 @@
+alocacao p01 0 1023
+alocacao p02 1024 2047
+alocacao p03 2048 3071
+alocacao p04 3072 4095
+liberacao p01 0 1023
+liberacao p03 2048 3071
+alocacao bad erro!

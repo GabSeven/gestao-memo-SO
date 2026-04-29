@@ -1,0 +1,9 @@
+5
+p01;p02;p03;p04;bad
+aloca p01 1024
+aloca p02 1024
+aloca p03 1024
+aloca p04 1024
+libera p01
+libera p03
+aloca bad 2000

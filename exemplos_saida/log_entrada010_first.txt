@@ -1,0 +1,2 @@
+alocacao b01 0 2048
+alocacao b02 2049 2058

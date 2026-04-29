@@ -1,0 +1,9 @@
+2
+p01;p02
+aloca p01 500
+aloca p02 500
+acessa p01 10
+acessa p01 20
+acessa p01 499
+libera p01
+libera p02

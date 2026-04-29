@@ -1,0 +1,7 @@
+alocacao p01 0 511
+alocacao p02 512 1023
+acesso p01 10 10
+acesso p01 20 20
+acesso p01 499 499
+liberacao p01 0 511
+liberacao p02 512 1023

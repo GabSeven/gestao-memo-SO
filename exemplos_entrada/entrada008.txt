@@ -1,0 +1,4 @@
+2
+err;fat
+aloca err 3000
+aloca fat 2000

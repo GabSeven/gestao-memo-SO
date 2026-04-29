@@ -1,0 +1,4 @@
+alocacao p01 0 127
+acesso p01 100 100
+acesso p01 99 99
+liberacao p01 0 127

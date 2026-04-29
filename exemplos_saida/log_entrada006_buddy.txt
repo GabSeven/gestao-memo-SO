@@ -1,0 +1,4 @@
+alocacao p01 0 127
+acesso p01 150 violacao
+alocacao p02 128 191
+acesso p02 10 138

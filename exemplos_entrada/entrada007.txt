@@ -1,0 +1,6 @@
+1
+p01
+aloca p01 100
+acessa p01 100
+acessa p01 99
+libera p01

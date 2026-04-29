@@ -1,0 +1,6 @@
+alocacao p01 0 199
+alocacao p02 200 299
+alocacao p03 300 799
+liberacao p01 0 199
+liberacao p03 300 799
+alocacao p04 300 449

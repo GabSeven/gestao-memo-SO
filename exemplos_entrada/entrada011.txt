@@ -1,0 +1,8 @@
+4
+p01;p02;p03;p04
+aloca p01 200
+aloca p02 100
+aloca p03 500
+libera p01
+libera p03
+aloca p04 150

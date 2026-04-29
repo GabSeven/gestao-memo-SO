@@ -1,0 +1,4 @@
+alocacao b01 0 299
+alocacao b02 300 999
+alocacao b03 1000 1999
+liberacao b01 0 299
