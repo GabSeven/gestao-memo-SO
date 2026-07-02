@@ -135,6 +135,7 @@ public:
 	Buddy(array<Bloco, TAM_MEMORIA> &mem, unordered_map<int, Particao> &tab, ofstream &log)
 	: EstrategiaAlocacao(mem, tab, log) {
 		buddyMemo.insert({TAM_MEMORIA, 0});
+		bM.insert({TAM_MEMORIA, {0}});
 	}
 
 protected:
@@ -169,12 +170,12 @@ public:
 
 	};
 
-	void realizarRequisicao(Requisicao req){
-		estrategiaAloc->executaRequisicao(req, log);
-	};
-
 	void simular(vector<Requisicao> requisicoes){
 		for (const auto & req: requisicoes) realizarRequisicao(req);
+	};
+
+	void realizarRequisicao(Requisicao req){
+		estrategiaAloc->executaRequisicao(req, log);
 	};
 };
 
@@ -182,7 +183,7 @@ public:
 int EstrategiaAlocacao::executaRequisicao(Requisicao req, ofstream & log){
 	if (req.op == OP_ALLOC){
 		auto [inicio, fim] = aloca(req.pid, req.param.value());
-
+		
 		log << "alocacao " << nomeProcesso[req.pid];
 		if (inicio == ERROR_VALUE){
 			log << " erro!" << endl;
@@ -206,8 +207,8 @@ int EstrategiaAlocacao::executaRequisicao(Requisicao req, ofstream & log){
 	} else if (req.op == OP_FREE){
 		auto [inicio, fim] = libera(req.pid);
 
-		log << "liberacao " << nomeProcesso[req.pid] << " "
-		<< inicio << " " << fim << endl;
+		// log << "liberacao " << nomeProcesso[req.pid] << " "
+		// << inicio << " " << fim << endl;
 	}
 	return 0;
 };
@@ -329,24 +330,36 @@ tuple<int, int> WorstFit::aloca(int pid, int ua) {
 tuple<int, int> Buddy::aloca(int pid, int ua) {
 	int tamNecessario = 1;
 	while (tamNecessario < ua) tamNecessario<<=1;
-	auto it = buddyMemo.lower_bound(tamNecessario);
+	// auto it = buddyMemo.lower_bound(tamNecessario);
+	auto it = bM.lower_bound(tamNecessario);
 	
-	if (it == buddyMemo.end()) {
+	if (it == bM.end()) {
 		return {ERROR_VALUE, 0};
 	}
 
 	int tam = it->first;
-	int inicio = it->second;
-
-	buddyMemo.erase(it);
+	set<int> &tamSet = it->second;
+	
+	int inicio = *tamSet.begin();
+	
+	tamSet.erase(inicio);
+	if (tamSet.empty()) bM.erase(it);
+	
 	while (tam > tamNecessario) {	
 		tam>>=1;
-		buddyMemo.insert({tam, tam+inicio});
+		if (bM.find(tam) != bM.end()){
+			bM.find(tam)->second.insert(tam+inicio);
+		} else {
+			bM.insert({tam, {tam+inicio}});
+		}
 	}
 	
 	tabelaParticao[pid] = {inicio, tam};
 	int fim = MMU::limiteFisico(tabelaParticao[pid]);
-	
+	for (int i = inicio; i <= fim; i++){
+		memoria[i] = {.free= false, .id = pid};
+	}
+
 	return {inicio, fim};
 };
 
@@ -355,7 +368,7 @@ tuple<int, int> Buddy::libera(int pid) {
 	Particao p = tabelaParticao[pid];
 	int inicio = p.base;
 	int fim = MMU::limiteFisico(tabelaParticao[pid]);
-	cout << p.base << " " << p.limite << " " << fim;
+
 	for (int i = inicio; i <= fim; i++) {
 		memoria[i] = {.free = true, .id = 0};
 	}
@@ -363,22 +376,36 @@ tuple<int, int> Buddy::libera(int pid) {
 	
 	int tam = p.limite;
 	int init = p.base;
-	auto it = buddyMemo.lower_bound(p.limite);
-	while (it!=buddyMemo.end() && it->first == tam){
-		if((init ^ tam) == it->second){
-			if (it->second < init){
-				init = it->second;
-			}
-			tam<<=1;
-			buddyMemo.erase(it);
-			it = buddyMemo.lower_bound(tam);
-		} else {
-			it++;
-		}
-	}
 
-	buddyMemo.insert({tam, inicio});
+	// auto it = buddyMemo.lower_bound(p.limite);
+	auto mapIt = bM.lower_bound(tam);
 
+	// while (it!=buddyMemo.end() && it->first == tam){
+	// while (mapIt != bM.end() && mapIt->first == tam) {// && numIt!=buddyMemo.end() && it->first == tam){
+	// 	auto &setElem = mapIt->second;
+	// 	auto numIt = setElem.begin();
+		
+	// 	while (numIt != setElem.end()){
+	// 		if ((init ^ tam) == *numIt){
+	// 			if (*numIt < init){
+	// 				init = *numIt;
+	// 			}
+	// 			tam<<=1;
+	// 			setElem.erase(numIt);
+	// 			if (setElem.empty()) bM.erase(mapIt);
+	// 			mapIt = bM.lower_bound(tam);
+	// 		} else {
+	// 			numIt++;
+	// 		}
+	// 	}
+	// 	mapIt++;
+	// }
+	// if (bM.find(tam) != bM.end()){
+	// 	bM.find(tam)->second.insert(inicio);
+	// } else {
+	// 	bM.insert({tam, {inicio}});
+	// }
+	cout << "ok" << endl;
 	return {inicio, fim};
 };
 
@@ -462,7 +489,8 @@ string nomeLogFile(char* argv[]) {
 
 	string nomeLog = "log_" + arquivoEntrada + "_" + estrategiaAloc + ".txt";
 
-	return caminho + nomeLog;
+	// cout << caminho + nomeLog;
+	return "out/" + nomeLog;
 }
 
 int main(int argc, char *argv[]) {
@@ -504,7 +532,6 @@ int main(int argc, char *argv[]) {
 	simulador.simular(requisicoes);
 	
 	log.close();
-	cout << "tudo ok" <<endl;
 
 	return 0;
 }
